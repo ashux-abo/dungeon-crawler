@@ -14,10 +14,17 @@ public abstract class Entity {
   }
 
   public void takeDamage(int damage) {
-    this.hp -= damage;
-    if (this.hp < 0)
-      this.hp = 0;
+    this.hp -= damage; 
+    if (this.hp < 0) this.hp = 0;
     System.out.println(name + " takes " + damage + " damge! (HP: " + hp + "/" + maxHp + ")");
-
   }
+
+  public boolean isAlive(){
+    return this.hp > 0;
+  }
+
+  public abstract void attack(Entity target);
+
+  public String getName() {return name;}
+  public int getHp() {return hp;}
 }
