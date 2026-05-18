@@ -1,0 +1,7 @@
+# Ignore compiled Java bytecode
+*.class
+
+# Ignore Neovim swap files and logs
+*.swp
+*.swo
+.DS_Store
