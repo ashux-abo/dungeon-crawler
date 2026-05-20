@@ -1,6 +1,7 @@
 package com.rpg;
 
 import com.rpg.entities.Player;
+import com.rpg.entities.Goblin;
 
 public class Main {
   public static void main(String[] args) {
@@ -20,5 +21,12 @@ public class Main {
     player.gainXp(120);
 
     player.displayStatus();
+
+    Goblin goblin = new Goblin("Peasant Goblin");
+    goblin.displayStatus();
+
+    goblin.takeDamage(25);
+
+    goblin.displayStatus();
   }
 }

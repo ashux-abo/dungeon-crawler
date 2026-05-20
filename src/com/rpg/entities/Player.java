@@ -14,7 +14,7 @@ public class Player extends Entity {
 
   @Override
   public void attack(Entity target) {
-    System.out.println("\n>>> " + this.name + " swingw their sword at " + target.getName() + "!");
+    System.out.println("\n>>> " + this.name + " swings their sword at " + target.getName() + "!");
 
     int formalDamage = this.attackPower;
     if (Math.random() < 0.20) {
