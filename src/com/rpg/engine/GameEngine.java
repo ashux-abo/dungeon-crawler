@@ -8,8 +8,10 @@ import java.util.Scanner;
 public class GameEngine {
     private Player player;
     private Room currentRoom;
+    private Room previousRoom;
     private boolean isRunning;
     private Scanner scanner;
+    private Goblin enemyExist;
 
     public GameEngine(String player){
         this.scanner = new Scanner(System.in);
@@ -34,6 +36,7 @@ public class GameEngine {
         treasureRoom.setEnemy(new Goblin("Peasant Goblin"));
 
         this.currentRoom = spawnRoom;
+        this.previousRoom = spawnRoom;
     }
 
     public void start(){
@@ -41,7 +44,22 @@ public class GameEngine {
 
         while (isRunning){
             //display current environment
-            currentRoom.describe();;
+            currentRoom.describe();
+            if (currentRoom.getEnemy() != null){
+                enemyExist = currentRoom.getEnemy();
+                if(enemyExist.isAlive()){
+                    System.out.println("DEFEAT THE ENEMY");
+                    handleCombatSequence(enemyExist);
+
+                    if(!player.isAlive()){
+                        System.out.println("\nYou have been perished in the dark.");
+                        isRunning = false;
+                        break;
+                    }
+
+                    continue;
+                }
+            }
             System.out.println("\nWhat would you like to do? ");
 
             //capture user input
@@ -52,7 +70,7 @@ public class GameEngine {
 
             //enforce state boundaries
             if(!player.isAlive()){
-                System.out.println("\n You have presihed in the dark.");
+                System.out.println("\n You have perished in the dark.");
                 isRunning = false;
             }
         }
@@ -100,7 +118,70 @@ public class GameEngine {
             System.out.println("\nYou bumped into a solid stone wall. There is no path that way");
         } else {
             System.out.println("\nYou walk " + direction + "...");
+            this.previousRoom = this.currentRoom;
             this.currentRoom = nextRoom;
+        }
+    }
+
+    //handleCombat
+    private void handleCombatSequence(Goblin enemy){
+       System.out.println("=".repeat(50));
+       System.out.println(" ".repeat(10)
+               + " PLAYER: "
+               + player.getName() + ": "
+               + player.getHp() + "/"
+               + player.getMaxHp() + " HP");
+       System.out.println(" ".repeat(10)
+               + " ENEMY: "
+               + enemy.getName()
+               + ": "
+               + enemy.getHp()
+               + "/" + enemy.getMaxHp() + " HP"
+               );
+        System.out.println("=".repeat(50));
+
+        System.out.println("\n[ATTACK} | [RUN] | [INVENTORY]");
+        System.out.print("What action do you want to perform? (e.g., 'attack', 'inventory') ");
+        String action = scanner.nextLine().toLowerCase().trim();
+        processAction(action);
+    }
+
+    //parse the user action
+    public void processAction(String action){
+        String[] words = action.split(" ");
+        String verb = words[0];
+
+        switch (verb){
+            case "attack":
+                if(!player.isAlive()){
+                    break;
+                }
+                player.attack(enemyExist);
+
+                if(enemyExist.isAlive()){
+                    enemyExist.attack(player);
+                }else{
+                    System.out.println("You defeated the " + enemyExist.getName() + "!");
+                    player.gainXp(30);
+                    player.addGold(20);
+                }
+                break;
+            case "inventory":
+                break;
+            case "run":
+                if(Math.random() < 0.50){
+                    System.out.println("Escape Successfully!");
+                    if(this.previousRoom != null){
+                        this.currentRoom = this.previousRoom;
+                    }
+                }else{
+                    System.out.println("Escape Failed!");
+                    enemyExist.attack(player);
+                }
+                break;
+            default:
+                System.out.println("Unknown action. Try commands like: 'attack', 'inventory', or 'run'.");
+                break;
         }
     }
 }

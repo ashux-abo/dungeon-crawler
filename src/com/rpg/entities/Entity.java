@@ -27,4 +27,6 @@ public abstract class Entity {
 
   public String getName() {return name;}
   public int getHp() {return hp;}
+  public int getMaxHp() {return maxHp; }
+  public  int getAttackPower() {return  attackPower;}
 }

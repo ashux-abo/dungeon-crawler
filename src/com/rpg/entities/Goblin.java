@@ -4,19 +4,20 @@ public class Goblin extends Entity {
   private int level;
 
   public Goblin(String name) {
-    super("Goblin", 50, 50, 15);
+    super(name, 100, 100, 15);
     this.level = 1;
   }
 
   @Override
   public void attack(Entity target) {
-    System.out.println("\n>>>" + this.name + "Uses their scratch to the " + target.getName() + "!");
+    System.out.println("\n>>> " + this.name + " Uses their scratch to " + target.getName() + "!");
 
     int formalDamage = this.attackPower;
     if (Math.random() < 0.50) {
       formalDamage *= (int) 2.5;
       System.out.println("CRITICAL HIT!");
     }
+    target.takeDamage(formalDamage);
   }
 
   public void displayStatus() {
