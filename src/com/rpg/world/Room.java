@@ -1,6 +1,6 @@
 package com.rpg.world;
 
-import com.rpg.entities.Goblin;
+import com.rpg.entities.Entity;
 
 public class Room {
     private String name;
@@ -12,7 +12,7 @@ public class Room {
     private Room east;
     private Room west;
 
-    private Goblin enemy;
+    private Entity enemy;
 
     public Room(String name, String description){
         this.name = name;
@@ -47,7 +47,7 @@ public class Room {
     public Room getEast() {return east;}
     public Room getWest() {return west;}
 
-    public Goblin getEnemy(){return enemy;}
-    public void setEnemy(Goblin enemy) {this.enemy = enemy;}
+    public Entity getEnemy(){return enemy;}
+    public void setEnemy(Entity enemy) {this.enemy = enemy;}
     public String getName() {return name;}
 }
