@@ -13,6 +13,7 @@ public class GameEngine {
     private boolean isRunning;
     private Scanner scanner;
     private Entity enemyExist;
+    private Item healthPotion;
 
     public GameEngine(String player){
         this.scanner = new Scanner(System.in);
@@ -150,7 +151,7 @@ public class GameEngine {
                );
         System.out.println("=".repeat(50));
 
-        System.out.println("\n[ATTACK] | [RUN] | [INVENTORY]");
+        System.out.println("\n[ATTACK} | [RUN] | [INVENTORY]");
         System.out.print("What action do you want to perform? (e.g., 'attack', 'inventory') ");
         String action = scanner.nextLine().toLowerCase().trim();
         processAction(action);
@@ -183,7 +184,7 @@ public class GameEngine {
                 break;
             case "inventory":
                 player.displayInventory();
-
+                player.useItem(0);
                 break;
             case "run":
                 if(Math.random() < 0.50){
