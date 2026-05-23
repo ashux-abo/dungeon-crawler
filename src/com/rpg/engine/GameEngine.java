@@ -1,6 +1,7 @@
 package com.rpg.engine;
 
 import com.rpg.entities.*;
+import com.rpg.items.Item;
 import com.rpg.world.*;
 
 import java.util.Scanner;
@@ -11,7 +12,7 @@ public class GameEngine {
     private Room previousRoom;
     private boolean isRunning;
     private Scanner scanner;
-    private Goblin enemyExist;
+    private Entity enemyExist;
 
     public GameEngine(String player){
         this.scanner = new Scanner(System.in);
@@ -24,16 +25,25 @@ public class GameEngine {
         Room spawnRoom = new Room("Dungeon Entrance", "Cold wind howls from the surface. The cobblestones are damp.");
         Room darkHallway = new Room("Eerie Hallway", "A narrow, long hallway flickering with dying torches.");
         Room treasureRoom = new Room("Treasure Vault", "Gold coins litter the floor. A massive stone chest sits in the center.");
-
+        Room alchemistLab = new Room("Alchemist Lab", "Shattered glass vats line the walls. A pungent green fog hugs the floor.");
+        Room barracks = new Room("Guard Barracks", "Decayed wooden bunk beds are scattered around. It looks empty and safe.");
         //Spawn room: north goes to hallway
         spawnRoom.setExits(darkHallway, null, null, null);
 
         //Hallway: south goes to spawn and west goes to treasure room
-        darkHallway.setExits(null, spawnRoom, null, treasureRoom);
+        darkHallway.setExits(treasureRoom, spawnRoom, barracks, alchemistLab);
 
         //Treasure room: east goest to hallway
-        treasureRoom.setExits(null, null, darkHallway, null);
+        treasureRoom.setExits(null, darkHallway, null, null);
+
+        alchemistLab.setExits(null, null, darkHallway,null);
+
+        barracks.setExits(null, null, null, darkHallway);
+
         treasureRoom.setEnemy(new Goblin("Peasant Goblin"));
+        alchemistLab.setEnemy(new Skeleton("Rattling Skeleton"));
+
+        barracks.setRoomLoot(new Item("Elixir of life", "An ancient golden brew. Restores 60 HP.", 60));
 
         this.currentRoom = spawnRoom;
         this.previousRoom = spawnRoom;
@@ -124,7 +134,7 @@ public class GameEngine {
     }
 
     //handleCombat
-    private void handleCombatSequence(Goblin enemy){
+    private void handleCombatSequence(Entity enemy){
        System.out.println("=".repeat(50));
        System.out.println(" ".repeat(10)
                + " PLAYER: "
@@ -140,10 +150,15 @@ public class GameEngine {
                );
         System.out.println("=".repeat(50));
 
-        System.out.println("\n[ATTACK} | [RUN] | [INVENTORY]");
+        System.out.println("\n[ATTACK] | [RUN] | [INVENTORY]");
         System.out.print("What action do you want to perform? (e.g., 'attack', 'inventory') ");
         String action = scanner.nextLine().toLowerCase().trim();
         processAction(action);
+    }
+
+    //TO DO: perform a way to use the item in combat with a chance of the enemy attack the player
+    public void handleItemUse(int useItem){
+
     }
 
     //parse the user action
@@ -167,6 +182,8 @@ public class GameEngine {
                 }
                 break;
             case "inventory":
+                player.displayInventory();
+
                 break;
             case "run":
                 if(Math.random() < 0.50){

@@ -1,15 +1,21 @@
 package com.rpg.entities;
+import java.util.ArrayList;
+import com.rpg.items.Item;
 
 public class Player extends Entity {
   private int exp;
   private int level;
   private int gold;
 
+  private ArrayList<Item> inventory;
+
   public Player(String name) {
     super(name, 100, 100, 15);
     this.exp = 0;
     this.level = 1;
     this.gold = 0;
+    this.inventory = new ArrayList<Item>();
+    this.inventory.add(new Item("Health Potion", "A shimmering red liquid that restores 30 HP.", 30));
   }
 
   @Override
@@ -51,5 +57,37 @@ public class Player extends Entity {
     System.out.println("Attack Power: " + attackPower);
     System.out.println("Gold: " + gold);
     System.out.println("-".repeat(33));
+  }
+
+  public void displayInventory(){
+    System.out.println("\n ----- YOUR INVENTORY -----");
+    if(inventory.isEmpty()){
+      System.out.println("Your backpack is completely empty.");
+      return;
+    }
+
+    for(int i = 0; i < inventory.size(); i++){
+      System.out.println("[" + (i+1) + "] " + inventory.get(i).getName());
+    }
+  }
+
+  public void useItem(int index){
+    if(index >= 0 && index < inventory.size()){
+      Item item = inventory.get(index);
+      item.use(this);
+      inventory.remove(index);
+    }else{
+      System.out.println("Invalid item selection");
+    }
+  }
+
+  public void heal(int amount){
+    this.hp += amount;
+
+    if(this.hp > this.maxHp){
+      this.hp = this.maxHp;
+    }
+
+    System.out.println(this.name + " recovered " + amount + " HP! (Current HP: " + this.hp + "/" + this.maxHp + ")");
   }
 }
