@@ -150,7 +150,7 @@ public class GameEngine {
                );
         System.out.println("=".repeat(50));
 
-        System.out.println("\n[ATTACK] | [RUN] | [INVENTORY]");
+        System.out.println("\n[ATTACK} | [RUN] | [INVENTORY]");
         System.out.print("What action do you want to perform? (e.g., 'attack', 'inventory') ");
         String action = scanner.nextLine().toLowerCase().trim();
         processAction(action);
