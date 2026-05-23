@@ -1,32 +1,28 @@
 package com.rpg;
 
+import com.rpg.engine.GameEngine;
 import com.rpg.entities.Player;
-import com.rpg.entities.Goblin;
+
+import java.util.Scanner;
 
 public class Main {
-  public static void main(String[] args) {
+  static void main() {
+
     System.out.println("=".repeat(33));
     System.out.println("  WELCOME TO THE CLI DUNGEON  ");
     System.out.println("=".repeat(33));
-    System.out.println("Initializing system components...");
 
-    System.out.println("\nSetup successfull! Ready to build");
+    initializePlayer();
+  }
 
-    Player player = new Player("Hero");
-    player.displayStatus();
+  private static void initializePlayer(){
+    Scanner sc = new Scanner(System.in);
+    System.out.print(" Enter Your Name: ");
+    String initializeName = sc.next().toUpperCase().trim();
+    Player player = new Player(initializeName);
+    System.out.println("=".repeat(5) + " Name: " + player.getName() + " " + "=".repeat(5));
 
-    player.takeDamage(25);
-
-    player.addGold(50);
-    player.gainXp(120);
-
-    player.displayStatus();
-
-    Goblin goblin = new Goblin("Peasant Goblin");
-    goblin.displayStatus();
-
-    goblin.takeDamage(25);
-
-    goblin.displayStatus();
+    GameEngine engine = new GameEngine(player.getName());
+    engine.start();
   }
 }
